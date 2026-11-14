@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Admin Dashboard — NRI International Ltd</title>
+  <meta name="description" content="NRI International Ltd website administration">
+  <meta name="theme-color" content="#0b5fd8">
+  <link rel="icon" type="image/svg+xml" href="images/brand/logo.svg">
+  <link rel="stylesheet" href="css/admin.css">
+  <script>
+    document.documentElement.classList.remove('no-js');
+    try { document.documentElement.setAttribute('data-theme', localStorage.getItem('nriint-admin-theme') || 'light'); }
+    catch (e) { document.documentElement.setAttribute('data-theme', 'light'); }
+  </script>
+</head>
+<body class="adm">
+
+  <!-- ═══ LOGIN ═══ -->
+  <div class="login" id="adm-login">
+    <div class="login-card">
+      <img class="login-logo" src="images/brand/logo.svg" alt="NRI International Ltd">
+      <h1>Admin sign in</h1>
+      <p>Enter your password to open the NRI International Ltd dashboard.</p>
+      <form id="adm-login-form" autocomplete="off">
+        <label class="field">
+          <span>Password</span>
+          <div class="input-icon">
+            <input type="password" id="adm-pass" placeholder="••••••••" autocomplete="current-password" required>
+            <button type="button" class="icon-btn" id="adm-pass-eye" aria-label="Show password"><i data-lucide="eye"></i></button>
+          </div>
+        </label>
+        <div class="form-error" id="adm-login-err" hidden>Incorrect password — please try again</div>
+        <button type="submit" class="btn btn-primary btn-block" id="adm-login-btn">Sign in</button>
+      </form>
+      <p class="login-foot"><a href="index.html">← Back to website</a></p>
+    </div>
+  </div>
+
+  <!-- ═══ DASHBOARD ═══ -->
+  <div class="shell" id="adm-dash" hidden>
+    <aside class="side" id="adm-side">
+      <a class="side-brand" href="index.html" target="_blank" rel="noopener" title="Open website">
+        <img src="images/brand/logo.svg" alt="NRI International Ltd">
+        <span><b>NRI</b> Admin</span>
+      </a>
+      <nav class="side-nav" id="adm-tabs" aria-label="Sections">
+        <button class="nav-item active" data-tab="dash"><i data-lucide="layout-dashboard"></i><span>Dashboard</span></button>
+        <button class="nav-item" data-tab="products"><i data-lucide="package"></i><span>Products</span><em class="pill" id="pill-products" hidden></em></button>
+        <button class="nav-item" data-tab="inquiries"><i data-lucide="inbox"></i><span>Inquiries</span><em class="pill hot" id="pill-inquiries" hidden></em></button>
+        <button class="nav-item" data-tab="chat"><i data-lucide="message-circle"></i><span>Live chat</span><em class="pill hot" id="pill-chat" hidden></em></button>
+        <button class="nav-item" data-tab="content"><i data-lucide="file-pen-line"></i><span>Website content</span></button>
+        <button class="nav-item" data-tab="certificates"><i data-lucide="badge-check"></i><span>Company certificates</span></button>
+        <button class="nav-item" data-tab="settings"><i data-lucide="settings-2"></i><span>Settings &amp; system</span></button>
+      </nav>
+      <div class="side-foot">
+        <button class="nav-item" id="adm-theme"><i data-lucide="moon"></i><span>Dark mode</span></button>
+        <button class="nav-item" id="adm-logout"><i data-lucide="log-out"></i><span>Log out</span></button>
+      </div>
+    </aside>
+    <div class="scrim" id="adm-scrim" hidden></div>
+
+    <div class="main">
+      <header class="top">
+        <button class="icon-btn only-mobile" id="adm-burger" aria-label="Menu"><i data-lucide="menu"></i></button>
+        <h1 id="adm-title">Dashboard</h1>
+        <div class="top-actions">
+          <span class="conn" id="adm-conn" title="Backend connection">● connecting…</span>
+          <button class="icon-btn" id="adm-sound" title="Chat sound" aria-pressed="true"><i data-lucide="bell-ring"></i></button>
+          <button class="icon-btn" id="adm-refresh" title="Refresh"><i data-lucide="refresh-cw"></i></button>
+        </div>
+      </header>
+
+      <main class="content">
+
+        <!-- ── DASHBOARD ── -->
+        <section class="pane active" id="tab-dash">
+          <div class="alert-bar" id="adm-alerts" hidden></div>
+          <div class="stats" id="adm-stats"></div>
+          <div class="grid-2-1">
+            <div class="card">
+              <div class="card-head">
+                <div><h2>Page views</h2><p class="muted" id="adm-chart-sub"></p></div>
+                <div class="seg" id="adm-range">
+                  <button data-range="7" class="on">7 days</button>
+                  <button data-range="30">30 days</button>
+                </div>
+              </div>
+              <div id="adm-chart" class="chart"></div>
+            </div>
+            <div class="card">
+              <div class="card-head"><h2>Top pages</h2></div>
+              <ul class="bars-list" id="adm-toppages"></ul>
+            </div>
+          </div>
+          <div class="grid-3">
+            <div class="card">
+              <div class="card-head"><h2>Latest inquiries</h2><button class="link-btn" data-go="inquiries">View all</button></div>
+              <div id="adm-latest-inq" class="mini-list"></div>
+            </div>
+            <div class="card">
+              <div class="card-head"><h2>Latest chats</h2><button class="link-btn" data-go="chat">Open chat</button></div>
+              <div id="adm-latest-chat" class="mini-list"></div>
+            </div>
+            <div class="card">
+              <div class="card-head"><h2>Chat visitors by country</h2></div>
+              <ul class="bars-list" id="adm-countries"></ul>
+            </div>
+          </div>
+        </section>
+
+        <!-- ── PRODUCTS ── -->
+        <section class="pane" id="tab-products">
+          <div class="card notice" id="adm-import-card" hidden>
+            <div>
+              <h2>Import the website’s current products</h2>
+              <p class="muted">The database list is empty or incomplete. Import the products built into the website once so you can edit them here. Do this <b>before</b> adding a new product — as soon as the database has products, the site shows the database list instead of the built-in one.</p>
+            </div>
+            <button type="button" class="btn btn-primary" id="adm-import-btn">Import website products</button>
+          </div>
+          <div class="toolbar">
+            <div class="search"><i data-lucide="search"></i><input type="search" id="p-search" placeholder="Search products…"></div>
+            <select id="p-cat" class="select"><option value="">All categories</option></select>
+            <select id="p-status" class="select">
+              <option value="">All status</option><option value="live">Published</option><option value="hidden">Hidden</option>
+            </select>
+            <span class="spacer"></span>
+            <button class="btn" id="p-export"><i data-lucide="download"></i>Export</button>
+            <button class="btn btn-primary" id="p-add"><i data-lucide="plus"></i>Add product</button>
+          </div>
+          <div class="card flush">
+            <div class="table-wrap">
+              <table class="table" id="adm-ptable">
+                <thead><tr><th style="width:56px">Order</th><th>Product</th><th>Category</th><th style="width:110px">Visible</th><th style="width:150px"></th></tr></thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+          <p class="muted small" id="p-hint"></p>
+        </section>
+
+        <!-- ── INQUIRIES ── -->
+        <section class="pane" id="tab-inquiries">
+          <div class="toolbar">
+            <div class="chips" id="inq-chips"></div>
+            <span class="spacer"></span>
+            <div class="search"><i data-lucide="search"></i><input type="search" id="inq-search" placeholder="Search name, email, subject…"></div>
+            <button class="btn" id="inq-export"><i data-lucide="download"></i>Export CSV</button>
+          </div>
+          <div class="bulk" id="inq-bulk" hidden>
+            <span id="inq-bulk-count"></span>
+            <button class="btn btn-sm" data-bulk="read">Mark read</button>
+            <button class="btn btn-sm" data-bulk="replied">Mark replied</button>
+            <button class="btn btn-sm" data-bulk="archived">Archive</button>
+            <button class="btn btn-sm btn-danger" data-bulk="delete">Delete</button>
+          </div>
+          <div class="card flush">
+            <div class="table-wrap">
+              <table class="table" id="adm-inqtable">
+                <thead><tr><th style="width:40px"><input type="checkbox" id="inq-all" aria-label="Select all"></th><th>From</th><th>Subject</th><th style="width:150px">Received</th><th style="width:110px">Status</th></tr></thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ── CHAT ── -->
+        <section class="pane" id="tab-chat">
+          <div class="chat" id="chat-wrap">
+            <div class="chat-list card flush">
+              <div class="chat-list-head">
+                <h2>Conversations</h2>
+                <div class="seg small" id="chat-filter">
+                  <button data-cf="all" class="on">All</button><button data-cf="unread">Unread</button><button data-cf="resolved">Resolved</button>
+                </div>
+              </div>
+              <div id="adm-thread-list" class="thread-list"></div>
+            </div>
+            <div class="chat-pane card flush" id="chat-pane">
+              <div class="chat-empty" id="chat-empty">
+                <i data-lucide="messages-square"></i>
+                <p>Select a conversation to read and reply.</p>
+                <small class="muted">New visitor messages also arrive in your Telegram. Replies written here appear in the visitor’s chat box within seconds.</small>
+              </div>
+              <div class="chat-open" id="chat-open" hidden>
+                <div class="chat-head">
+                  <button class="icon-btn only-mobile" id="chat-back" aria-label="Back"><i data-lucide="arrow-left"></i></button>
+                  <div class="chat-who">
+                    <b id="chat-name">Visitor</b>
+                    <small id="chat-meta" class="muted"></small>
+                  </div>
+                  <div class="chat-actions">
+                    <a class="icon-btn" id="chat-map" target="_blank" rel="noopener" title="Open IP location on map" hidden><i data-lucide="map-pin"></i></a>
+                    <button class="btn btn-sm" id="chat-resolve"><i data-lucide="check"></i><span>Resolve</span></button>
+                    <button class="icon-btn danger" id="chat-delete" title="Delete conversation"><i data-lucide="trash-2"></i></button>
+                  </div>
+                </div>
+                <div class="chat-msgs" id="adm-chat-msgs"></div>
+                <div class="quick" id="chat-quick"></div>
+                <form class="composer" id="adm-chat-form">
+                  <textarea id="adm-chat-input" rows="1" maxlength="1500" placeholder="Write a reply… (Enter to send, Shift+Enter for a new line)"></textarea>
+                  <button type="submit" class="btn btn-primary" id="adm-chat-send"><i data-lucide="send"></i><span>Send</span></button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ── WEBSITE CONTENT ── -->
+        <section class="pane" id="tab-content">
+          <div class="grid-2">
+            <form class="card" id="content-form" autocomplete="off">
+              <div class="card-head"><div><h2>Contact details</h2><p class="muted">Shown on the Contact page. Leave a field empty to keep the built-in text.</p></div></div>
+              <label class="field"><span>Public email</span><input id="cf-email" type="email" maxlength="120" placeholder="info@nriint.com"></label>
+              <label class="field"><span>Phone / WhatsApp</span><input id="cf-mobile" type="text" maxlength="40" placeholder="+880 …"></label>
+              <label class="field"><span>Address</span><textarea id="cf-address" rows="3" maxlength="300"></textarea></label>
+              <label class="field"><span>Working hours</span><input id="cf-hours" type="text" maxlength="160" placeholder="Saturday – Thursday, 09:00 – 18:00 (GMT+6)"></label>
+              <div class="card-head"><div><h2>Factory video</h2><p class="muted">Shown in the video section of the home page.</p></div></div>
+              <label class="field"><span>Video link <small class="muted">(YouTube / Vimeo link, https://…mp4, or images/scenes/vdo.mp4)</small></span><input id="cf-video" type="text" maxlength="500" placeholder="https://www.youtube.com/watch?v=…  (leave empty to use images/scenes/vdo.mp4)"></label>
+              <small class="muted">Too big to upload? Put the video on YouTube (Unlisted) and paste the link here — no file size limit.</small>
+              <div class="card-head"><div><h2>Chat box</h2></div></div>
+              <label class="field"><span>Welcome message</span><textarea id="cf-welcome" rows="3" maxlength="300" placeholder="Welcome to NRI International Ltd. How may we assist you today?"></textarea></label>
+              <button type="submit" class="btn btn-primary">Save changes</button>
+            </form>
+            <div class="card">
+              <div class="card-head"><h2>How this works</h2></div>
+              <ul class="plain-list">
+                <li>Saved text is stored in your Supabase database and appears on the public pages on the next page load.</li>
+                <li>Product pages are edited under <b>Products</b>.</li>
+                <li>Long-form page copy remains in the site files; directors and certificates are managed below.</li>
+              </ul>
+            </div>
+          </div>
+          <form class="card about-editor" id="about-content-form" autocomplete="off">
+            <div class="card-head"><div><h2>Board of directors — LEADERSHIP</h2><p class="muted">Add approved directors. The section stays hidden on the website until a director is added.</p></div><button type="button" class="btn btn-sm" id="about-add-director"><i data-lucide="plus"></i>Add director</button></div>
+            <div id="about-director-editor"></div>
+            <button type="submit" class="btn btn-primary">Save leadership</button>
+          </form>
+        </section>
+
+        <!-- ── COMPANY CERTIFICATES ── -->
+        <section class="pane" id="tab-certificates">
+          <form class="card about-editor" id="certificate-content-form" autocomplete="off">
+            <div class="card-head">
+              <div><h2>Company certificates</h2><p class="muted">Add certificate images using the same options as product images. The website section stays hidden when no certificates are saved.</p></div>
+              <button type="button" class="btn btn-sm" id="about-add-certificate"><i data-lucide="plus"></i>Add certificate</button>
+            </div>
+            <div id="about-certificate-editor"></div>
+            <button type="submit" class="btn btn-primary">Save certificates</button>
+          </form>
+        </section>
+
+        <!-- ── SETTINGS & SYSTEM ── -->
+        <section class="pane" id="tab-settings">
+          <div class="grid-2">
+            <div class="col">
+              <div class="card">
+                <div class="card-head"><h2>Telegram live chat</h2></div>
+                <ul class="status-list" id="tg-status"><li>Checking…</li></ul>
+                <div class="btn-row">
+                  <button type="button" class="btn btn-primary btn-sm" id="tg-setup">Connect Telegram replies</button>
+                  <button type="button" class="btn btn-sm" id="tg-disconnect">Use pull mode</button>
+                  <button type="button" class="btn btn-sm" id="tg-test">Send test message</button>
+                  <button type="button" class="btn btn-sm" id="tg-refresh">Refresh</button>
+                </div>
+                <p class="muted small">To answer a visitor from Telegram, <b>swipe-reply</b> to the bot’s alert message and type your answer (or send <code>@visitor-IP your answer</code>). “Pull mode” needs no webhook: the server fetches your Telegram replies every few seconds.</p>
+              </div>
+
+              <div class="card">
+                <div class="card-head"><h2>Quick replies</h2></div>
+                <p class="muted small">One reply per line. They appear as buttons above the reply box in the Live chat tab.</p>
+                <textarea id="qr-text" rows="7" class="mono"></textarea>
+                <div class="btn-row"><button type="button" class="btn btn-primary btn-sm" id="qr-save">Save quick replies</button></div>
+              </div>
+            </div>
+
+            <div class="col">
+              <div class="card">
+                <div class="card-head"><h2>System check</h2><button class="btn btn-sm" id="sys-run"><i data-lucide="activity"></i>Run check</button></div>
+                <ul class="status-list" id="sys-list"><li class="muted">Press “Run check” to test the database, Telegram and the chat pipeline.</li></ul>
+              </div>
+
+              <div class="card">
+                <div class="card-head"><h2>Change password</h2></div>
+                <form id="adm-pass-form" autocomplete="off">
+                  <label class="field"><span>Current password</span><input id="pw-cur" type="password" autocomplete="current-password" required></label>
+                  <label class="field"><span>New password <small class="muted">(min 6 characters)</small></span><input id="pw-new" type="password" autocomplete="new-password" minlength="6" required></label>
+                  <label class="field"><span>Repeat new password</span><input id="pw-new2" type="password" autocomplete="new-password" minlength="6" required></label>
+                  <button type="submit" class="btn btn-primary btn-sm">Update password</button>
+                </form>
+              </div>
+
+              <div class="card">
+                <div class="card-head"><h2>Connection</h2></div>
+                <p class="muted small" id="adm-conn-info">Checking backend…</p>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <!-- ═══ PRODUCT DRAWER ═══ -->
+  <div class="drawer" id="p-drawer" hidden>
+    <div class="drawer-scrim" data-close></div>
+    <form class="drawer-panel" id="adm-product-form" autocomplete="off">
+      <div class="drawer-head"><h2 id="adm-pf-title">Add product</h2><button type="button" class="icon-btn" data-close aria-label="Close"><i data-lucide="x"></i></button></div>
+      <div class="drawer-body">
+        <input type="hidden" id="pf-id">
+        <label class="field"><span>Product name *</span><input id="pf-name" type="text" required maxlength="120" placeholder="e.g., Woven Brand Labels"></label>
+        <div class="two">
+          <label class="field"><span>Category</span><input id="pf-category" type="text" maxlength="60" list="pf-cat-list" placeholder="e.g., Labels &amp; Tags"><datalist id="pf-cat-list"></datalist></label>
+          <label class="field"><span>Sort order</span><input id="pf-sort" type="number" value="99" min="0" max="9999"></label>
+        </div>
+        <label class="field"><span>Tagline</span><input id="pf-tagline" type="text" maxlength="160" placeholder="Short line shown under the product name"></label>
+        <label class="field"><span>Description</span><textarea id="pf-desc" rows="5" maxlength="4000" placeholder="Full product description…"></textarea></label>
+        <div class="two">
+          <div class="field">
+            <span>Product image <small class="muted">(path, URL or upload)</small></span>
+            <input id="pf-image" type="text" placeholder="images/products/woven-labels.webp">
+            <input type="file" accept="image/*" data-image-target="pf-image">
+            <div class="drive-url-row"><input type="url" data-drive-url placeholder="Google Drive public share URL"><button type="button" class="btn btn-sm" data-drive-apply="pf-image">Use Drive link</button></div>
+            <small class="muted">Set Google Drive access to “Anyone with the link” → Viewer.</small>
+          </div>
+          <div class="field">
+            <span>Machine image <small class="muted">(optional)</small></span>
+            <input id="pf-machine" type="text" placeholder="images/machines/labels.png">
+            <input type="file" accept="image/*" data-image-target="pf-machine">
+            <div class="drive-url-row"><input type="url" data-drive-url placeholder="Google Drive public share URL"><button type="button" class="btn btn-sm" data-drive-apply="pf-machine">Use Drive link</button></div>
+            <small class="muted">Set Google Drive access to “Anyone with the link” → Viewer.</small>
+          </div>
+        </div>
+        <div class="previews" id="adm-preview-row" hidden>
+          <figure><img id="adm-preview-img" alt=""><figcaption>Product</figcaption></figure>
+          <figure><img id="adm-preview-machine" alt=""><figcaption>Machine</figcaption></figure>
+        </div>
+        <div class="field">
+          <span>Specifications</span>
+          <div id="pf-specs"></div>
+          <button type="button" class="btn btn-sm" id="pf-add-spec"><i data-lucide="plus"></i>Add specification</button>
+        </div>
+        <details class="field pd-box" id="pd-box">
+          <summary><b>Detail page</b> <small class="muted">— the rich page visitors see when they open this product (banner, types, highlights)</small></summary>
+          <p class="muted small">Leave everything empty to use the built-in page. Saved together with the product.</p>
+          <div class="field">
+            <span>Banner image <small class="muted">(optional — default is the product image)</small></span>
+            <input id="pd-banner" type="text" placeholder="images/products/…">
+            <input type="file" accept="image/*" data-image-target="pd-banner">
+          </div>
+          <label class="field"><span>Intro statement</span><textarea id="pd-statement" rows="2" maxlength="300" placeholder="One strong sentence shown under the title"></textarea></label>
+          <div class="field">
+            <span>Gallery photos <small class="muted">(up to 12 — the product photo and production-line photo are added automatically)</small></span>
+            <div id="pd-gallery"></div>
+            <button type="button" class="btn btn-sm" id="pd-add-photo"><i data-lucide="plus"></i>Add photo</button>
+          </div>
+          <div class="field">
+            <span>Types / options <small class="muted">(up to 8 — shown as alternating blocks)</small></span>
+            <div id="pd-variants"></div>
+            <button type="button" class="btn btn-sm" id="pd-add-variant"><i data-lucide="plus"></i>Add type</button>
+          </div>
+          <label class="field"><span>“Applicable to all” box title</span><input id="pd-common-title" type="text" maxlength="140" placeholder="Applicable to all woven labels"></label>
+          <label class="field"><span>“Applicable to all” items <small class="muted">(one per line)</small></span><textarea id="pd-common-items" rows="4"></textarea></label>
+          <div class="field">
+            <span>Highlights <small class="muted">(up to 3)</small></span>
+            <div id="pd-highlights"></div>
+            <button type="button" class="btn btn-sm" id="pd-add-highlight"><i data-lucide="plus"></i>Add highlight</button>
+          </div>
+          <label class="field"><span>Big statement band <small class="muted">(optional)</small></span><input id="pd-stat" type="text" maxlength="90" placeholder="e.g., 7 – 10 day lead time, shipped worldwide"></label>
+        </details>
+        <label class="check"><input type="checkbox" id="pf-published" checked><span>Visible on the website</span></label>
+      </div>
+      <div class="drawer-foot">
+        <button type="button" class="btn" data-close>Cancel</button>
+        <button type="submit" class="btn btn-primary" id="pf-save">Save product</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- ═══ INQUIRY DRAWER ═══ -->
+  <div class="drawer" id="inq-drawer" hidden>
+    <div class="drawer-scrim" data-close></div>
+    <div class="drawer-panel">
+      <div class="drawer-head"><h2 id="adm-inq-view-title">Inquiry</h2><button type="button" class="icon-btn" data-close aria-label="Close"><i data-lucide="x"></i></button></div>
+      <div class="drawer-body" id="adm-inq-view-body"></div>
+      <div class="drawer-foot" id="adm-inq-view-foot"></div>
+    </div>
+  </div>
+
+  <!-- ═══ CONFIRM ═══ -->
+  <div class="modal" id="adm-confirm" hidden>
+    <div class="modal-card">
+      <h3 id="adm-confirm-title">Are you sure?</h3>
+      <p id="adm-confirm-text" class="muted"></p>
+      <div class="btn-row end"><button class="btn" id="adm-confirm-no">Cancel</button><button class="btn btn-danger" id="adm-confirm-yes">Delete</button></div>
+    </div>
+  </div>
+
+  <div class="toast" id="adm-toast" hidden><span id="adm-toast-msg"></span></div>
+
+  <script src="js/config.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/api.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/product-defaults.js"></script>
+  <script src="js/lucide.min.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,31 @@
+/* Our Vision / Our Mission pages (loads after style.css). */
+.vm-hero { position: relative; padding: calc(var(--header-h) + 90px) 0 70px; background: var(--navy-950); overflow: hidden; }
+.vm-hero::before {
+  content: ""; position: absolute; inset: 0;
+  background: radial-gradient(60% 80% at 85% 20%, rgba(247,148,30,.16), transparent 60%),
+              radial-gradient(50% 70% at 10% 90%, rgba(30,120,255,.14), transparent 60%);
+}
+.vm-hero .inner { position: relative; z-index: 2; }
+.vm-hero h1 { font-family: var(--font-display); font-weight: 700; letter-spacing: -0.02em; line-height: .98; font-size: clamp(40px, 7vw, 88px); margin-top: 20px; }
+.vm-hero .sub { margin-top: 22px; max-width: 700px; color: rgba(244,247,251,.78); line-height: 1.75; font-size: 17px; }
+
+.vm-split { display: grid; grid-template-columns: 1.05fr .95fr; gap: 56px; align-items: center; }
+@media (max-width: 900px) { .vm-split { grid-template-columns: 1fr; gap: 32px; } }
+.vm-statement { font-family: var(--font-display); font-weight: 500; letter-spacing: -.02em; line-height: 1.28; font-size: clamp(22px, 2.6vw, 34px); }
+.vm-statement b { color: var(--brand); font-weight: 600; }
+.vm-copy { margin-top: 24px; color: rgba(244,247,251,.72); line-height: 1.8; font-size: 15.5px; }
+.vm-copy + .vm-copy { margin-top: 14px; }
+.vm-frame { border: 1px solid var(--border); background: var(--navy-800); overflow: hidden; position: relative; }
+.vm-frame::before { content: ""; position: absolute; top: 0; left: 0; width: 56px; height: 3px; background: var(--brand); z-index: 2; }
+.vm-frame img { display: block; width: 100%; height: auto; }   /* natural ratio: never cropped */
+
+.values-grid.five { grid-template-columns: repeat(5, 1fr); }
+@media (max-width: 1200px) { .values-grid.five { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 760px) { .values-grid.five { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 480px) { .values-grid.five { grid-template-columns: 1fr; } }
+
+.vm-next { display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap;
+  border: 1px solid var(--border); background: var(--navy-800); padding: 34px; position: relative; overflow: hidden; }
+.vm-next::before { content: ""; position: absolute; top: 0; left: 0; width: 46px; height: 3px; background: var(--brand); }
+.vm-next h3 { font-family: var(--font-display); font-size: 24px; margin-top: 10px; }
+.vm-next p { margin-top: 8px; color: var(--steel); line-height: 1.7; font-size: 14.5px; max-width: 560px; }
