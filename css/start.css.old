@@ -1,0 +1,98 @@
+/* ═══════════════════════════════════════════════════════════════
+   NRI International — polished white start page.
+   Off-white canvas, giant textile-masked logo, minimal nav, and a
+   scroll-driven reveal into the full-bleed factory with a big headline.
+   Loads last; delete this file + its <link> to go back to the old intro.
+   ═══════════════════════════════════════════════════════════════ */
+:root { --paper: #f4f4f1; --ink: #0d1117; }
+
+.intro { background: var(--paper); }
+
+/* giant logo, filled with the factory textile/machine imagery */
+.intro-mark { width: min(680px, 74vw); transform: translate(-50%, -52%); }
+.intro-mark-fill { will-change: transform, opacity; }
+.intro-mark-fill > img { display: block; width: 100%; height: auto; }
+.intro-mask {
+  position: absolute; inset: 0;
+  background: url('../images/scenes/hero-factory.png') 18% 60% / 230% auto no-repeat;
+  -webkit-mask: url('../images/brand/logo.svg') center / contain no-repeat;
+          mask: url('../images/brand/logo.svg') center / contain no-repeat;
+  opacity: .72;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
+/* curtain: image + shade + headline */
+.intro-shade {
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(7,17,32,.18) 0%, rgba(7,17,32,.05) 40%, rgba(7,17,32,.72) 100%);
+}
+.intro-headline {
+  position: absolute; left: 0; right: 0; bottom: clamp(24px, 5vh, 56px);
+  text-align: center; color: #fff;
+  font-family: var(--font-display);
+  font-weight: 500; letter-spacing: -.035em; line-height: 1.02;
+  font-size: clamp(32px, 5.6vw, 84px);
+  padding: 0 24px;
+  text-wrap: balance;
+}
+.intro-tagline { display: none; }
+
+/* bottom meta line */
+.intro-meta {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  display: flex; justify-content: space-between; align-items: center; gap: 16px;
+  padding: 0 clamp(20px, 4vw, 48px) 28px;
+  font: 500 12px/1 var(--font-body); letter-spacing: .02em; color: rgba(13,17,23,.58);
+}
+.intro-scroll { display: inline-flex; align-items: center; gap: 10px; color: var(--ink); }
+.intro-scroll i { display: block; width: 1px; height: 26px; background: currentColor; transform-origin: top; animation: intro-line 1.8s var(--motion-ease, ease) infinite; }
+@keyframes intro-line { 0% { transform: scaleY(0); } 55% { transform: scaleY(1); } 100% { transform: scaleY(1); opacity: 0; } }
+
+/* minimal header over the off-white start page */
+.site-header.intro-light .header-inner { max-width: none; padding: 0 clamp(20px, 4vw, 48px); }
+.site-header.intro-light .header-logo .logo-chip { background: transparent; padding: 0; border-radius: 0; }
+.site-header.intro-light .header-logo img { height: 30px; }
+.site-header.intro-light .main-nav { gap: 30px; }
+.site-header.intro-light .main-nav a {
+  font-family: var(--font-body); font-size: 14px; font-weight: 500;
+  letter-spacing: -.005em; text-transform: none; color: var(--ink);
+  border-bottom-color: transparent;
+}
+.site-header.intro-light .main-nav a:hover { color: var(--brand); border-bottom-color: transparent; }
+.site-header.intro-light .header-cta {
+  background: var(--ink); color: #fff; border-color: var(--ink);
+  font-family: var(--font-body); font-size: 13px; font-weight: 500; letter-spacing: 0; text-transform: none;
+  padding: 10px 18px;
+}
+.site-header.intro-light .header-cta:hover { background: var(--brand); border-color: var(--brand); color: #fff; }
+.site-header.intro-light .header-cta .dot { background: var(--brand); }
+.site-header.intro-light .header-cta:hover .dot { background: #fff; }
+.site-header.intro-light .header-cta svg { width: 15px; height: 15px; }
+
+@media (max-width: 900px) {
+  .intro-mark { width: min(520px, 84vw); }
+  .site-header.intro-light .main-nav a { color: var(--ivory); }
+}
+@media (max-width: 640px) {
+  .intro-headline { font-size: clamp(28px, 8.6vw, 44px); bottom: clamp(24px, 5vh, 40px); }
+  .intro-meta span:first-child { display: none; }
+  .intro-meta { justify-content: center; }
+}
+@media (prefers-reduced-motion: reduce) { .intro-scroll i { animation: none; } }
+
+/* ── cards: small chip labels (image cards, as in the reference) ── */
+.showcase-card .cat {
+  display: inline-block; width: fit-content;
+  padding: 6px 11px; border-radius: 999px;
+  background: rgba(244,244,241,.92); color: var(--ink);
+  font: 600 10.5px/1 var(--font-body); letter-spacing: .06em; text-transform: uppercase;
+  backdrop-filter: blur(6px);
+}
+.showcase-card h3 { letter-spacing: -.02em; }
+.product-card .cat, .product-card .kicker-brand {
+  letter-spacing: .06em;
+}
+
+/* the zero-size SVG filter holder must not create a line box above the page (it showed as a dark strip) */
+.intro-filters { position: absolute; width: 0; height: 0; overflow: hidden; }
